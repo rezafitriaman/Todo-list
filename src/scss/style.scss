@@ -135,7 +135,7 @@ body {
 }
 
 #todo {
-  min-height: 55px;
+  min-height: 70px;
   position: relative;
   .check {
     position: absolute;
@@ -152,7 +152,7 @@ body {
       }
     }
     a:hover > .fa, a:focus > .fa, a:active > .fa {
-      color: $color_two;
+      color: $color_six;
     }
   }
 }
@@ -173,7 +173,7 @@ body {
 }
 
 #completed {
-  min-height: 55px;
+  min-height: 70px;
   margin-top: 45px;
   position: relative;
   .check {
@@ -186,7 +186,7 @@ body {
       position: relative;
       bottom: 5px;
       .fa {
-        color: $color_two;
+        color: $color_six;
         transition: color ease-in-out .20s;
       }
     }
@@ -221,7 +221,7 @@ body {
   height: 1px;
   display: block;
   background-color: $color_three;
-  top: -13px;
+  top: -17px;
   left: 50%;
   margin-right: -50%;
   transform: translate(-50%, -50%);

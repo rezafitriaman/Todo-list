@@ -24,7 +24,6 @@ function renderTodoListToHTML() {
 }
 
 function dataObjectUpdated() {
-	console.log(data);
 	//make it Json first then store it as a string
 	localStorage.setItem('todoList', JSON.stringify(data));
 }
@@ -47,7 +46,7 @@ document.getElementById('add').addEventListener('click', function() {
 });
 
 //on key down Enter
-document.getElementById('item').addEventListener('keydown', function(e) {
+document.getElementById('item').addEventListener('keydown', function(e) { 
 	var value = this.value;
 
 	if(e.keyCode === 13 && value || e.keyCode === 13 && value ) {
@@ -68,6 +67,7 @@ function addItemTodo(value, completed) {
 	var container = document.createElement("div")
 	container.classList.add('container');
 	container.setAttribute('id', 'container');
+	container.style.opacity = 0;
 	//create domString
 	var domString = '<div class="row">\
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\
@@ -91,17 +91,19 @@ function addItemTodo(value, completed) {
 	container.innerHTML = domString;
 	//insert before other item on click
 	parent.insertBefore(container, parent.childNodes[0]);
+	//fade in function after append it before first child(insert Before)
+	fadeIn(container);
 
 	//get the delete button and remove item on click trash
 	var deleteButton = document.getElementsByClassName('deleteButton');
-	console.log(deleteButton)
+
 	for (var i = 0; i < deleteButton.length; i++) {
 		deleteButton[i].addEventListener('click', removeItem);
 	}
 
 	//get the complete button and add item to complete or re-add
 	var completeButton = document.getElementsByClassName('checkButton');
-	console.log(completeButton);
+
 	for (var i = 0; i < completeButton.length; i++) {
 		completeButton[i].addEventListener('click', completeItem)
 	}
@@ -124,16 +126,17 @@ function completeItem() {
 
 	//check what the parent is
 	var target = (parentID == 'todo') ? document.getElementById('completed') : document.getElementById('todo');
-	
-	target.insertBefore(item, target.childNodes[0]);
+	console.log('item from completeItem', item);
+	fadeOut(item, target, true);
+	/*target.insertBefore(item, target.childNodes[0]);*/
 
 	dataObjectUpdated();
 }
 
 //the remove function
 function removeItem() {
-	var target = this.closest("#container");
-	var parentID = target.parentNode.id;
+	var item = this.closest("#container");
+	var parentID = item.parentNode.id;
 	var value = this.parentNode.parentNode.querySelector("#text").innerText;
 
 	if(parentID === 'todo') {
@@ -141,14 +144,51 @@ function removeItem() {
 	}else {
 		data.completed.splice(data.completed.indexOf(value), 1);
 	}
-
-	target.remove();
+	console.log('target from removeItem', item)
+	fadeOut(item, false, false);
+	/*target.remove();*/
 
 	dataObjectUpdated();
 };
 
+//Fade out
+function fadeOut(item, target, completed) {
+	
+    var timer = setInterval(function () {
+        op = op - 0.1;
+        if (op <= 0.0){
+            clearInterval(timer);
+            if(completed === true) {
+            	target.insertBefore(item, target.childNodes[0]);
+            	console.log('append');
+            	op = 1;
+            }else {
+            	item.remove();
+            	console.log('remove');
+            }
+        }
+        console.log(op);
+        item.style.opacity = op;
+    }, 40);
 
+   var op = 1;  // initial opacity
+}
 
+//fade in
+function fadeIn(container) {
+	var timer = setInterval(function() {
+		op = op + 0.1
+		if(op >= 1) {
+			clearInterval(timer);
+			
+			console.log('add');
+		}
+		console.log('op', op);
+		container.style.opacity = op;
+	},40);
+
+	var op = 0.1;
+}
 /* Modernizr 2.6.2 (Custom Build) | MIT & BSD
  * Build: http://modernizr.com/download/#-csstransforms3d-shiv-cssclasses-teststyles-testprop-testallprops-prefixes-domprefixes-load
  */
