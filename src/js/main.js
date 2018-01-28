@@ -6,13 +6,13 @@ renderTodoListToHTML ();
 function renderTodoListToHTML() {
 
 	if(data.completed.length == 0 && data.todo.length == 0 ) {
-		console.log('two of them is empty');
+		/*console.log('two of them is empty');*/
 		
 	}else {
 		console.log('one of them is not empty');
 		for (var i = 0; i < data.todo.length; i++) {
 			var value = data.todo[i];
-			addItemTodo(value) 
+			addItemTodo(value);
 		}
 		for (var j = 0; j < data.completed.length; j++) {
 			var value = data.completed[j];
@@ -40,7 +40,7 @@ document.getElementById('add').addEventListener('click', function() {
 
 		dataObjectUpdated();
 	}else {
-		console.log('no value');
+		/*console.log('no value');*/
 	}
 });
 
@@ -125,7 +125,7 @@ function completeItem() {
 
 	//check what the parent is
 	var target = (parentID == 'todo') ? document.getElementById('completed') : document.getElementById('todo');
-	console.log('item from completeItem', item);
+	/*console.log('item from completeItem', item);*/
 	fadeOut(item, target, true);
 	/*target.insertBefore(item, target.childNodes[0]);*/
 
@@ -143,7 +143,7 @@ function removeItem() {
 	}else {
 		data.completed.splice(data.completed.indexOf(value), 1);
 	}
-	console.log('target from removeItem', item)
+	/*console.log('target from removeItem', item)*/
 	fadeOut(item, false, false);
 	/*target.remove();*/
 
@@ -159,14 +159,14 @@ function fadeOut(item, target, completed) {
             clearInterval(timer);
             if(completed === true) {
             	target.insertBefore(item, target.childNodes[0]);
-            	console.log('append');
+            	/*console.log('append');*/
             	op = 1;
             }else {
             	item.remove();
-            	console.log('remove');
+            	/*console.log('remove');*/
             }
         }
-        console.log(op);
+        /*console.log(op);*/
         item.style.opacity = op;
     }, 40);
 
@@ -180,11 +180,28 @@ function fadeIn(container) {
 		if(op >= 1) {
 			clearInterval(timer);
 			
-			console.log('add');
+			/*console.log('add');*/
 		}
-		console.log('op', op);
+		/*console.log('op', op);*/
 		container.style.opacity = op;
 	},40);
 
 	var op = 0.1;
 }
+
+/*function intro*/
+function intro () {
+	var intro = document.getElementById('intro');
+	var todoApp = document.getElementById('todo-app');
+
+	console.log(intro)
+	function showApp() {
+		intro.style.display = 'none'
+		todoApp.style.display = 'block'
+	}
+	setTimeout(function() {
+		showApp();
+	},3000);
+}
+
+intro();
