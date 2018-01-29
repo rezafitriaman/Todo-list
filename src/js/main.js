@@ -65,6 +65,7 @@ function addItemTodo(value, completed) {
 	//create div an apply class and id
 	var container = document.createElement("div")
 	container.classList.add('container');
+	container.classList.add('mirror');
 	container.setAttribute('id', 'container');
 	container.style.opacity = 0;
 	//create domString
@@ -205,3 +206,6 @@ function intro () {
 }
 
 intro();
+
+/*drag en drop dragula*/
+dragula([document.getElementById('todo')]);

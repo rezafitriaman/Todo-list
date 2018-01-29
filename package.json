@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/rezafitriaman/Todo_list/issues"
   },
-  "homepage": "https://github.com/rezafitriaman/Todo_list#readme"
+  "homepage": "https://github.com/rezafitriaman/Todo_list#readme",
+  "dependencies": {
+    "dragula": "^3.7.2"
+  }
 }

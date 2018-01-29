@@ -196,6 +196,80 @@ section.wrapper {
   }
 }
 
+.mirror {
+  position: relative;
+  .row {
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0px 2px 4px rgba(44,62,80,0.15);
+    .content {
+      min-height: 50px;
+      position: relative;
+      .items {
+        list-style-type: none;
+        padding: 15px 15px;
+        margin-bottom: 0px;
+        .item {
+          display: inline-block;
+          p {
+            margin: 0 0 0px;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: $font;
+            color: $color_one;
+          }
+        }
+        .check::before {
+          content: "";
+          display: block;
+          width: 1px;
+          height: 30px;
+          background-color: #D2D7D3;
+          position: absolute;
+          right: 40px;
+          bottom: 4px;
+        }
+        .delete {
+          position: absolute;
+          right: 60px;
+          a {
+            display: block;
+            height: 100%;
+            width: 22px;
+            position: relative;
+            bottom: 5px;
+            .fa {
+              color: #D2D7D3;
+              transition: color ease-in-out .20s;
+            }
+          }
+          a:hover > .fa, a:focus > .fa, a:active > .fa {
+            color: #D33257;
+          }
+        }
+        .check {
+          position: absolute;
+          right: 0px;
+          a {
+            display: block;
+            height: 100%;
+            width: 22px;
+            position: relative;
+            bottom: 5px;
+            .fa {
+              color: $color_three;
+              transition: color ease-in-out .20s;
+            }
+          }
+          a:hover > .fa, a:focus > .fa, a:active > .fa {
+            color: $color_six;
+          }
+        }
+      }
+    }
+  }
+}
+
 .list {
   .container {
     padding-top: 17px;
