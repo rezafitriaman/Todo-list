@@ -217,6 +217,12 @@ section.wrapper {
             font-weight: 500;
             font-family: $font;
             color: $color_one;
+            position: relative;
+            top: 2px;
+            width: 225px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
         }
         .check::before {
@@ -227,7 +233,7 @@ section.wrapper {
           background-color: #D2D7D3;
           position: absolute;
           right: 40px;
-          bottom: 4px;
+          bottom: 2px;
         }
         .delete {
           position: absolute;
@@ -302,7 +308,7 @@ section.wrapper {
             background-color: #D2D7D3;
             position: absolute;
             right: 40px;
-            bottom: 4px;
+            bottom: 2px;
           }
           .delete {
             position: absolute;
@@ -312,7 +318,7 @@ section.wrapper {
               height: 100%;
               width: 22px;
               position: relative;
-              bottom: 5px;
+              bottom: 3px;
               .fa {
                 color: #D2D7D3;
                 transition: color ease-in-out .20s;
@@ -321,6 +327,12 @@ section.wrapper {
             a:hover > .fa, a:focus > .fa, a:active > .fa {
               color: #D33257;
             }
+          }
+          .fa-arrows-v {
+            position: absolute;
+            left: 0px;
+            top: 20px;
+            color: $color_three;
           }
         }
       }
@@ -339,7 +351,7 @@ section.wrapper {
       height: 100%;
       width: 22px;
       position: relative;
-      bottom: 5px;
+      bottom: 3px;
       .fa {
         color: $color_three;
         transition: color ease-in-out .20s;
@@ -378,7 +390,7 @@ section.wrapper {
       height: 100%;
       width: 22px;
       position: relative;
-      bottom: 5px;
+      bottom: 3px;
       .fa {
         color: $color_six;
         transition: color ease-in-out .20s;
@@ -396,7 +408,7 @@ section.wrapper {
       height: 100%;
       width: 22px;
       position: relative;
-      bottom: 5px;
+      bottom: 3px;
       .fa {
         color: #D33257;
         transition: color ease-in-out .20s;
@@ -434,4 +446,14 @@ section.wrapper {
   font-style: italic;
   font-family: $font;
   font-weight: 400;
+}
+
+/* Extra Small Devices, Phones */ 
+@media only screen and (max-width : 480px) {
+  .list .container .row .content .items .item p {
+    width: 225px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }

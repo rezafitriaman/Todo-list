@@ -73,6 +73,9 @@ function addItemTodo(value, completed) {
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\
                             <div class="content">\
                                 <ul class="items">\
+                                	<li class="item">\
+                                        <i class="fa fa-arrows-v" aria-hidden="true"></i>\
+                                    </li>\
                                     <li class="item">\
                                         <p class="text" id="text">'+ value +'</p>\
                                     </li>\
@@ -153,15 +156,16 @@ function removeItem() {
 
 //Fade out
 function fadeOut(item, target, completed) {
-	
+	console.log('fadeout')
     var timer = setInterval(function () {
         op = op - 0.1;
         if (op <= 0.0){
             clearInterval(timer);
             if(completed === true) {
             	target.insertBefore(item, target.childNodes[0]);
+            	fadeIn(item);
             	/*console.log('append');*/
-            	op = 1;
+            	
             }else {
             	item.remove();
             	/*console.log('remove');*/
@@ -169,6 +173,7 @@ function fadeOut(item, target, completed) {
         }
         /*console.log(op);*/
         item.style.opacity = op;
+        
     }, 40);
 
    var op = 1;  // initial opacity
@@ -176,26 +181,28 @@ function fadeOut(item, target, completed) {
 
 //fade in
 function fadeIn(container) {
+	console.log('fadein')
 	var timer = setInterval(function() {
 		op = op + 0.1
 		if(op >= 1) {
 			clearInterval(timer);
-			
 			/*console.log('add');*/
+			op = 1;
 		}
 		/*console.log('op', op);*/
 		container.style.opacity = op;
+
 	},40);
 
 	var op = 0.1;
+	
 }
 
 /*function intro*/
-function intro () {
+function intro() {
 	var intro = document.getElementById('intro');
 	var todoApp = document.getElementById('todo-app');
 
-	console.log(intro)
 	function showApp() {
 		intro.style.display = 'none'
 		todoApp.style.display = 'block'
@@ -208,4 +215,17 @@ function intro () {
 intro();
 
 /*drag en drop dragula*/
-dragula([document.getElementById('todo')]);
+function onTouchStart() {
+	/*first delete style property*/
+	var target = document.querySelectorAll('.mirror')
+	for (var i = 0; i < target.length; i++) {
+		target[i].addEventListener("touchstart", function() {
+			this.removeAttribute("style");
+		})
+	}
+	/*then add dragula fucntion*/
+	dragula([document.getElementById('todo')]);
+	dragula([document.getElementById('completed')]);
+}
+
+onTouchStart();
