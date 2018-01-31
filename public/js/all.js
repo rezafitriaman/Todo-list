@@ -934,7 +934,7 @@ function renderTodoListToHTML() {
 function dataObjectUpdated() {
 	//make it Json first then store it as a string on locaql sotrage
 	localStorage.setItem('todoList', JSON.stringify(data));
-	/*console.log(data);*/
+	/*console.log('data on doom', data);*/
 }
 
 /*User clicked on the add button
@@ -1147,18 +1147,50 @@ function onTouchStart() {
 onTouchStart();
 
 function observeDrop() {
-	var targetNode = document.getElementById('todo');
-	var childTargetNodes = targetNode.querySelectorAll('.mirror');
+	var targetNode = document.querySelectorAll('.list');
+	/*var childTargetNodes = targetNode.querySelectorAll('.mirror');
 	for (var i = 0; i < childTargetNodes.length; i++) {
 		(function(index) {
 		    childTargetNodes[i].addEventListener('touchend', function() {
 				console.log(childTargetNodes);
 				console.log(index)
-				console.log(data.todo.reverse())
+				console.log(data.todo)
 
+			})
+		})(i);
+	}*/
+	for (var i = 0; i < targetNode.length; i++) {
+
+		(function(index) {
+		    targetNode[i].addEventListener('touchend', function() {
+
+		    	var parent = this.getAttribute('id');
+
+		    	if(parent == 'todo') {
+
+		    		data.todo = [];
+		    	}else {
+		    		console.log('completed');
+		    		data.completed = [];
+		    	}
+
+		    	/*console.log(parent)*/
+		    	var targetList = this.querySelectorAll('.container')
+				for (var i = 0; i < targetList.length; i++) {
+					if(parent == 'todo') {
+						data.todo.unshift(targetList[i].querySelector('.text').innerText);
+					}else {
+						console.log('completed');
+						data.completed.unshift(targetList[i].querySelector('.text').innerText);
+					}
+					
+				}
+				/*console.log('newData todo ',data.todo)
+				console.log('newData completed ',data.completed)*/
+				dataObjectUpdated();
 			})
 		})(i);
 	}
 }
 
-observeDrop()
+observeDrop();
