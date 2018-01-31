@@ -240,13 +240,13 @@ onTouchStart();
 function observeDrop() {
 	var targetNode = document.getElementById('todo');
 	var childTargetNodes = targetNode.querySelectorAll('.mirror');
-	console.log(data.todo)
 	for (var i = 0; i < childTargetNodes.length; i++) {
 		(function(index) {
 		    childTargetNodes[i].addEventListener('touchend', function() {
-				console.log(this);
+				console.log(childTargetNodes);
 				console.log(index)
 				console.log(data.todo.reverse())
+
 			})
 		})(i);
 	}
