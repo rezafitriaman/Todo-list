@@ -256,20 +256,29 @@ section.wrapper {
         .check {
           position: absolute;
           right: 0px;
-          a {
+          .checkButton {
             display: block;
             height: 100%;
-            width: 22px;
+            width: 35px;
             position: relative;
             bottom: 5px;
+            border: none;
+            background-color: transparent;
+            left: 5px;
             .fa {
               color: $color_three;
               transition: color ease-in-out .20s;
             }
           }
-          a:hover > .fa, a:focus > .fa, a:active > .fa {
+          .checkButton:hover > .fa, .checkButton:focus > .fa, .checkButton:active > .fa {
             color: $color_six;
           }
+        }
+        .fa-arrows-alt {
+          position: absolute;
+          left: -2px;
+          top: 20px;
+          color: #979c98;
         }
       }
     }
@@ -313,26 +322,29 @@ section.wrapper {
           .delete {
             position: absolute;
             right: 60px;
-            a {
+            .checkButton {
               display: block;
               height: 100%;
-              width: 22px;
+              width: 35px;
               position: relative;
               bottom: 3px;
+              border: none;
+              background-color: transparent;
+              left: 5px;
               .fa {
                 color: #D2D7D3;
                 transition: color ease-in-out .20s;
               }
             }
-            a:hover > .fa, a:focus > .fa, a:active > .fa {
+            .checkButton:hover > .fa, .checkButton:focus > .fa, .checkButton:active > .fa {
               color: #D33257;
             }
           }
-          .fa-arrows-v {
+          .fa-arrows-alt {
             position: absolute;
-            left: 0px;
+            left: -2px;
             top: 20px;
-            color: $color_three;
+            color: #D2D7D3;
           }
         }
       }
@@ -346,18 +358,21 @@ section.wrapper {
   .check {
     position: absolute;
     right: 0px;
-    a {
+    .checkButton {
       display: block;
       height: 100%;
-      width: 22px;
+      width: 35px;
       position: relative;
       bottom: 3px;
+      border: none;
+      background-color: transparent;
+      left: 5px;
       .fa {
         color: $color_three;
         transition: color ease-in-out .20s;
       }
     }
-    a:hover > .fa, a:focus > .fa, a:active > .fa {
+    .checkButton:hover > .fa, .checkButton:focus > .fa, .checkButton:active > .fa {
       color: $color_six;
     }
   }
@@ -385,36 +400,42 @@ section.wrapper {
   .check {
     position: absolute;
     right: 0px;
-    a {
+    .checkButton {
       display: block;
       height: 100%;
-      width: 22px;
+      width: 35px;
       position: relative;
       bottom: 3px;
+      border: none;
+      background-color: transparent;
+      left: 5px;
       .fa {
         color: $color_six;
         transition: color ease-in-out .20s;
       }
     }
-    a:hover > .fa, a:focus > .fa, a:active > .fa {
+    .checkButton:hover > .fa, .checkButton:focus > .fa, .checkButton:active > .fa {
       color: $color_three;
     }
   }
   .delete {
     position: absolute;
     right: 60px;
-    a {
+    .checkButton {
       display: block;
       height: 100%;
-      width: 22px;
+      width: 35px;
       position: relative;
       bottom: 3px;
+      border: none;
+      background-color: transparent;
+      left: 5px;
       .fa {
         color: #D33257;
         transition: color ease-in-out .20s;
       }
     }
-    a:hover > .fa, a:focus > .fa, a:active > .fa {
+    .checkButton:hover > .fa, .checkButton:focus > .fa, .checkButton:active > .fa {
       color: #d332575c;
     }
   }

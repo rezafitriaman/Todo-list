@@ -9,7 +9,7 @@ function renderTodoListToHTML() {
 		/*console.log('two of them is empty');*/
 		
 	}else {
-		console.log('one of them is not empty');
+		/*console.log('one of them is not empty');*/
 		for (var i = 0; i < data.todo.length; i++) {
 			var value = data.todo[i];
 			addItemTodo(value);
@@ -23,8 +23,9 @@ function renderTodoListToHTML() {
 }
 
 function dataObjectUpdated() {
-	//make it Json first then store it as a string
+	//make it Json first then store it as a string on locaql sotrage
 	localStorage.setItem('todoList', JSON.stringify(data));
+	/*console.log(data);*/
 }
 
 /*User clicked on the add button
@@ -74,7 +75,7 @@ function addItemTodo(value, completed) {
                             <div class="content">\
                                 <ul class="items">\
                                 	<li class="item">\
-                                        <i class="fa fa-arrows-v" aria-hidden="true"></i>\
+                                        <i class="fa fa-arrows-alt" aria-hidden="true"></i>\
                                     </li>\
                                     <li class="item">\
                                         <p class="text" id="text">'+ value +'</p>\
@@ -83,7 +84,7 @@ function addItemTodo(value, completed) {
                                         <a id="delete" class="deleteButton"><i class="fa fa-trash-o fa-2x" aria-hidden="true"></i></a>\
                                     </li>\
                                     <li class="item check">\
-                                       <a id="check" class="checkButton"><i class="fa fa-check-circle-o fa-2x" aria-hidden="true"></i></a>\
+                                       <button id="check" class="checkButton"><i class="fa fa-check-circle-o fa-2x" aria-hidden="true"></i></button>\
                                     </li>\
                                 </ul>\
                             </div>\
@@ -108,18 +109,22 @@ function addItemTodo(value, completed) {
 	var completeButton = document.getElementsByClassName('checkButton');
 
 	for (var i = 0; i < completeButton.length; i++) {
-		completeButton[i].addEventListener('click', completeItem)
+		completeButton[i].addEventListener('click', completeItem);
 	}
-
 }
 
 //the add to complete function
 function completeItem() {
-	var value = this.parentNode.parentNode.querySelector("#text").innerText;
-	var item = this.closest("#container");
+	var completeButton = this;
+	var value = completeButton.parentNode.parentNode.querySelector("#text").innerText;
+	var item = completeButton.closest("#container");
 	var parentID = item.parentNode.id;
 
+	/*on click desable button*/
+	completeButton.setAttribute('disabled', true);
+
 	if(parentID === 'todo') {
+		
 		data.todo.splice(data.todo.indexOf(value), 1);
 		data.completed.push(value);
 	}else {
@@ -130,10 +135,11 @@ function completeItem() {
 	//check what the parent is
 	var target = (parentID == 'todo') ? document.getElementById('completed') : document.getElementById('todo');
 	/*console.log('item from completeItem', item);*/
-	fadeOut(item, target, true);
+	fadeOut(completeButton, item, target, true);
 	/*target.insertBefore(item, target.childNodes[0]);*/
 
 	dataObjectUpdated();
+	
 }
 
 //the remove function
@@ -148,15 +154,14 @@ function removeItem() {
 		data.completed.splice(data.completed.indexOf(value), 1);
 	}
 	/*console.log('target from removeItem', item)*/
-	fadeOut(item, false, false);
+	fadeOut(false, item, false, false);
 	/*target.remove();*/
 
 	dataObjectUpdated();
 };
 
 //Fade out
-function fadeOut(item, target, completed) {
-	console.log('fadeout')
+function fadeOut(completeButton, item, target, completed) {
     var timer = setInterval(function () {
         op = op - 0.1;
         if (op <= 0.0){
@@ -164,14 +169,13 @@ function fadeOut(item, target, completed) {
             if(completed === true) {
             	target.insertBefore(item, target.childNodes[0]);
             	fadeIn(item);
-            	/*console.log('append');*/
-            	
+            	/*finished delete disabled*/
+            	completeButton.removeAttribute('disabled');
             }else {
             	item.remove();
             	/*console.log('remove');*/
             }
         }
-        /*console.log(op);*/
         item.style.opacity = op;
         
     }, 40);
@@ -181,13 +185,13 @@ function fadeOut(item, target, completed) {
 
 //fade in
 function fadeIn(container) {
-	console.log('fadein')
 	var timer = setInterval(function() {
 		op = op + 0.1
 		if(op >= 1) {
 			clearInterval(timer);
 			/*console.log('add');*/
 			op = 1;
+
 		}
 		/*console.log('op', op);*/
 		container.style.opacity = op;
@@ -220,7 +224,10 @@ function onTouchStart() {
 	var target = document.querySelectorAll('.mirror')
 	for (var i = 0; i < target.length; i++) {
 		target[i].addEventListener("touchstart", function() {
+/*			var parent = this.parentNode;*/
 			this.removeAttribute("style");
+/*			console.log(parent)
+			observeDrop(parent);*/
 		})
 	}
 	/*then add dragula fucntion*/
@@ -229,3 +236,20 @@ function onTouchStart() {
 }
 
 onTouchStart();
+
+function observeDrop() {
+	var targetNode = document.getElementById('todo');
+	var childTargetNodes = targetNode.querySelectorAll('.mirror');
+	console.log(data.todo)
+	for (var i = 0; i < childTargetNodes.length; i++) {
+		(function(index) {
+		    childTargetNodes[i].addEventListener('touchend', function() {
+				console.log(this);
+				console.log(index)
+				console.log(data.todo.reverse())
+			})
+		})(i);
+	}
+}
+
+observeDrop()
