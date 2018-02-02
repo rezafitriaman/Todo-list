@@ -278,7 +278,10 @@ section.wrapper {
           position: absolute;
           left: -2px;
           top: 20px;
-          color: #979c98;
+          color: $color_three;
+        }
+        .fa-arrows-alt:hover, .fa-arrows-alt:focus, .fa-arrows-alt:active {
+          color: $color_three;
         }
       }
     }
@@ -345,6 +348,9 @@ section.wrapper {
             left: -2px;
             top: 20px;
             color: #D2D7D3;
+          }
+          .fa-arrows-alt:hover, .fa-arrows-alt:focus, .fa-arrows-alt:active {
+            color: $color_three;
           }
         }
       }

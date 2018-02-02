@@ -20,6 +20,8 @@ function renderTodoListToHTML() {
 		}
 
 	}
+	/*Call the on onTouchStart*/
+	onTouchStart();
 }
 
 function dataObjectUpdated() {
@@ -75,7 +77,7 @@ function addItemTodo(value, completed) {
                             <div class="content">\
                                 <ul class="items">\
                                 	<li class="item">\
-                                        <i class="fa fa-arrows-alt" aria-hidden="true"></i>\
+                                        <i class="fa fa-arrows-alt handle" aria-hidden="true"></i>\
                                     </li>\
                                     <li class="item">\
                                         <p class="text" id="text">'+ value +'</p>\
@@ -231,11 +233,18 @@ function onTouchStart() {
 		})
 	}
 	/*then add dragula fucntion*/
-	dragula([document.getElementById('todo')]);
-	dragula([document.getElementById('completed')]);
-}
+	dragula([document.getElementById('todo')], {
+		moves: function (el, container, handle) {
+    		return handle.classList.contains('handle');
+    	}	
+	});
 
-onTouchStart();
+	dragula([document.getElementById('completed')], {
+		moves: function (el, container, handle) {
+    		return handle.classList.contains('handle');
+    	}
+	});
+}
 
 function observeDrop() {
 	var targetNode = document.querySelectorAll('.list');
@@ -248,7 +257,6 @@ function observeDrop() {
 		    	var parent = this.getAttribute('id');
 
 		    	if(parent == 'todo') {
-
 		    		data.todo = [];
 		    	}else {
 		    		/*console.log('completed');*/
