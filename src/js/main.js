@@ -42,6 +42,7 @@ document.getElementById('add').addEventListener('click', function() {
 		data.todo.push(value);
 
 		dataObjectUpdated();
+		onTouchStart();
 	}else {
 		/*console.log('no value');*/
 	}
@@ -57,6 +58,7 @@ document.getElementById('item').addEventListener('keydown', function(e) {
 		document.getElementById('item').value = '';
 		data.todo.push(value);
 		dataObjectUpdated();
+		onTouchStart();
 	}
 
 });
@@ -77,7 +79,7 @@ function addItemTodo(value, completed) {
                             <div class="content">\
                                 <ul class="items">\
                                 	<li class="item">\
-                                        <i class="fa fa-arrows-alt handle" aria-hidden="true"></i>\
+                                        <i class="fa fa-bars fa-1x handle" aria-hidden="true"></i>\
                                     </li>\
                                     <li class="item">\
                                         <p class="text" id="text">'+ value +'</p>\
@@ -215,71 +217,115 @@ function intro() {
 	}
 	setTimeout(function() {
 		showApp();
-	},3000);
+	},2000);
 }
 
 intro();
 
 /*drag en drop dragula*/
 function onTouchStart() {
-	/*first delete style property*/
 	var target = document.querySelectorAll('.mirror')
-	for (var i = 0; i < target.length; i++) {
-		target[i].addEventListener("touchstart", function() {
-/*			var parent = this.parentNode;*/
-			this.removeAttribute("style");
-/*			console.log(parent)
-			observeDrop(parent);*/
-		})
-	}
-	/*then add dragula fucntion*/
-	dragula([document.getElementById('todo')], {
-		moves: function (el, container, handle) {
-    		return handle.classList.contains('handle');
-    	}	
-	});
+	var lifted = false;
+	var onlongtouch; 
+	var timer, lockTimer;
+	var touchduration = 800;
+	var dragTarget;
 
-	dragula([document.getElementById('completed')], {
+	function touchstart(e) {
+		e.preventDefault();
+		dragTarget = this;
+		if(lockTimer){
+			return;
+		}
+	    timer = setTimeout(onlongtouch, touchduration); 
+		lockTimer = true;
+	}
+
+	function touchend() {
+	    //stops short touches from firing the event
+	    if (timer){
+	        clearTimeout(timer); // clearTimeout, not cleartimeout..
+			lockTimer = false;
+		}
+		/*console.log(this)*/
+		/*update the list on drop*/
+		observeDrop(this);
+	}
+
+	/*first delete style property*/
+	for (var i = 0; i < target.length; i++) {
+
+		target[i].addEventListener("touchstart", function() {
+			this.removeAttribute("style");
+		});
+
+		target[i].querySelector('.handle').addEventListener("touchstart", touchstart, false);
+  		target[i].querySelector('.handle').addEventListener("touchend", touchend, false);
+
+	}
+
+	onlongtouch = function() {
+		var parent = dragTarget.closest('#container').parentNode.getAttribute('id');
+		var offsetTop = (parent == 'todo') ? dragTarget.closest('#container').offsetTop - window.scrollY + 130 : (dragTarget.closest('#container').offsetTop + document.querySelector('#todo').offsetHeight) - window.scrollY + 170;
+		
+		lifted = true;
+        drakeTodo.lift(dragTarget);
+        drakeCompleted.lift(dragTarget);
+
+        var guMirror = document.querySelector('.gu-mirror');
+
+       	guMirror.style.top = offsetTop + 'px';
+       	guMirror.style.left = 20 + 'px';
+
+		vibrate();
+	};
+	
+	/*then add dragula function*/
+	var drakeTodo = dragula([document.getElementById('todo')], {
 		moves: function (el, container, handle) {
-    		return handle.classList.contains('handle');
+			if (lifted) {
+	            lifted = false;
+	            return handle.classList.contains('handle');
+	        }
     	}
 	});
+
+	var drakeCompleted = dragula([document.getElementById('completed')], {
+		moves: function (el, container, handle) {
+    		if (lifted) { // Manage the drag after 1 second
+	            lifted = false;
+	            return handle.classList.contains('handle');
+	        }
+    	}
+	});
+
 }
 
-function observeDrop() {
-	var targetNode = document.querySelectorAll('.list');
+/*observe on drop and save the list on localstorage (dataObjectUpdated)*/
+function observeDrop(dropedItem) {
+	var parentTarget =  dropedItem.closest('#container').parentNode;
+	var targetList = parentTarget.querySelectorAll('.container');
 
-	for (var i = 0; i < targetNode.length; i++) {
+	if(parentTarget.getAttribute('id') == 'todo') {
+		console.log('if on todo', parentTarget.querySelectorAll('.container'))
+		data.todo = [];
 
-		(function(index) {
-		    targetNode[i].addEventListener('touchend', function() {
+		for (var i = 0; i < targetList.length; i++) {
+			data.todo.unshift(targetList[i].querySelector('.text').innerText);
+		}
 
-		    	var parent = this.getAttribute('id');
-
-		    	if(parent == 'todo') {
-		    		data.todo = [];
-		    	}else {
-		    		/*console.log('completed');*/
-		    		data.completed = [];
-		    	}
-
-		    	/*console.log(parent)*/
-		    	var targetList = this.querySelectorAll('.container')
-				for (var i = 0; i < targetList.length; i++) {
-					if(parent == 'todo') {
-						data.todo.unshift(targetList[i].querySelector('.text').innerText);
-					}else {
-						/*console.log('completed');*/
-						data.completed.unshift(targetList[i].querySelector('.text').innerText);
-					}
-					
-				}
-				/*console.log('newData todo ',data.todo)
-				console.log('newData completed ',data.completed)*/
-				dataObjectUpdated();
-			})
-		})(i);
+	}else {
+		data.completed = [];
+		for (var i = 0; i < targetList.length; i++) {
+			data.completed.unshift(targetList[i].querySelector('.text').innerText);
+		}
 	}
+
+	dataObjectUpdated();
 }
 
-observeDrop();
+document.addEventListener("deviceready", vibrate, false);
+function vibrate() {
+    console.log(navigator.vibrate);
+    navigator.vibrate(100);
+}
