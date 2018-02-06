@@ -20,7 +20,7 @@ function renderTodoListToHTML() {
 		}
 
 	}
-	/*Call the on onTouchStart*/
+	/*Call on onTouchStart*/
 	onTouchStart();
 }
 
@@ -32,7 +32,7 @@ function dataObjectUpdated() {
 
 /*User clicked on the add button
 if there is any text inside the item field, add that text to the todo list*/
-document.getElementById('add').addEventListener('click', function() {
+document.getElementById('add').addEventListener('touchstart', function() {
 	var value = document.getElementById('item').value;
 	//if the value not empty
 	if(value) {
@@ -43,6 +43,7 @@ document.getElementById('add').addEventListener('click', function() {
 
 		dataObjectUpdated();
 		onTouchStart();
+		vibrate();
 	}else {
 		/*console.log('no value');*/
 	}
@@ -59,6 +60,7 @@ document.getElementById('item').addEventListener('keydown', function(e) {
 		data.todo.push(value);
 		dataObjectUpdated();
 		onTouchStart();
+		vibrate();
 	}
 
 });
@@ -106,14 +108,14 @@ function addItemTodo(value, completed) {
 	var deleteButton = document.getElementsByClassName('deleteButton');
 
 	for (var i = 0; i < deleteButton.length; i++) {
-		deleteButton[i].addEventListener('click', removeItem);
+		deleteButton[i].addEventListener('touchstart', removeItem);
 	}
 
 	//get the complete button and add item to complete or re-add
 	var completeButton = document.getElementsByClassName('checkButton');
 
 	for (var i = 0; i < completeButton.length; i++) {
-		completeButton[i].addEventListener('click', completeItem);
+		completeButton[i].addEventListener('touchstart', completeItem);
 	}
 }
 
@@ -143,7 +145,7 @@ function completeItem() {
 	/*target.insertBefore(item, target.childNodes[0]);*/
 
 	dataObjectUpdated();
-	
+	vibrate();
 }
 
 //the remove function
@@ -162,6 +164,7 @@ function removeItem() {
 	/*target.remove();*/
 
 	dataObjectUpdated();
+	vibrate();
 };
 
 //Fade out
@@ -195,7 +198,6 @@ function fadeIn(container) {
 			clearInterval(timer);
 			/*console.log('add');*/
 			op = 1;
-
 		}
 		/*console.log('op', op);*/
 		container.style.opacity = op;
@@ -224,16 +226,26 @@ intro();
 
 /*drag en drop dragula*/
 function onTouchStart() {
-	var target = document.querySelectorAll('.mirror')
+	console.log('onTouchStart');
+	var target = document.querySelectorAll('.mirror');
 	var lifted = false;
-	var onlongtouch; 
 	var timer, lockTimer;
 	var touchduration = 800;
 	var dragTarget;
 
+	/*first delete style property*/
+	for (var i = 0; i < target.length; i++) {
+
+		target[i].querySelector('.handle').addEventListener("touchstart", touchstart, false);
+  		target[i].querySelector('.handle').addEventListener("touchend", touchend, false);
+
+	}
+
 	function touchstart(e) {
 		e.preventDefault();
 		dragTarget = this;
+
+		dragTarget.closest('#container').removeAttribute("style");
 		if(lockTimer){
 			return;
 		}
@@ -252,19 +264,7 @@ function onTouchStart() {
 		observeDrop(this);
 	}
 
-	/*first delete style property*/
-	for (var i = 0; i < target.length; i++) {
-
-		target[i].addEventListener("touchstart", function() {
-			this.removeAttribute("style");
-		});
-
-		target[i].querySelector('.handle').addEventListener("touchstart", touchstart, false);
-  		target[i].querySelector('.handle').addEventListener("touchend", touchend, false);
-
-	}
-
-	onlongtouch = function() {
+	 function onlongtouch() {
 		var parent = dragTarget.closest('#container').parentNode.getAttribute('id');
 		var offsetTop = (parent == 'todo') ? dragTarget.closest('#container').offsetTop - window.scrollY + 130 : (dragTarget.closest('#container').offsetTop + document.querySelector('#todo').offsetHeight) - window.scrollY + 170;
 		
@@ -324,6 +324,7 @@ function observeDrop(dropedItem) {
 	dataObjectUpdated();
 }
 
+//vibrate function
 document.addEventListener("deviceready", vibrate, false);
 function vibrate() {
     console.log(navigator.vibrate);
