@@ -1,6 +1,33 @@
 //create data for local storage
 var data = (localStorage.getItem('todoList')) ? JSON.parse(localStorage.getItem('todoList')) : { todo: [], completed: []};
 
+/*add dragula function*/
+var lifted = false;
+var drakeTodo = dragula([document.getElementById('todo')], {
+	moves: function (el, container, handle) {
+		if (lifted) {
+            lifted = false;
+            return handle.classList.contains('handle');
+        }
+	},
+	isContainer: function (el) {
+	   return el.classList.contains('.list');
+  	}
+});
+
+var drakeCompleted = dragula([document.getElementById('completed')], {
+	moves: function (el, container, handle) {
+		if (lifted) { // Manage the drag after 1 second
+            lifted = false;
+            return handle.classList.contains('handle');
+        }
+	},
+	isContainer: function (el) {
+	   return el.classList.contains('.list');
+  	}
+});
+
+//renderTodoListToHTML
 renderTodoListToHTML ();
 
 function renderTodoListToHTML() {
@@ -58,6 +85,7 @@ document.getElementById('item').addEventListener('keydown', function(e) {
 		addItemTodo(value);
 		document.getElementById('item').value = '';
 		data.todo.push(value);
+
 		dataObjectUpdated();
 		onTouchStart();
 		vibrate();
@@ -208,27 +236,11 @@ function fadeIn(container) {
 	
 }
 
-/*function intro*/
-function intro() {
-	var intro = document.getElementById('intro');
-	var todoApp = document.getElementById('todo-app');
-
-	function showApp() {
-		intro.style.display = 'none'
-		todoApp.style.display = 'block'
-	}
-	setTimeout(function() {
-		showApp();
-	},2000);
-}
-
-intro();
-
 /*drag en drop dragula*/
 function onTouchStart() {
 	console.log('onTouchStart');
 	var target = document.querySelectorAll('.mirror');
-	var lifted = false;
+
 	var timer, lockTimer;
 	var touchduration = 800;
 	var dragTarget;
@@ -279,25 +291,6 @@ function onTouchStart() {
 
 		vibrate();
 	};
-	
-	/*then add dragula function*/
-	var drakeTodo = dragula([document.getElementById('todo')], {
-		moves: function (el, container, handle) {
-			if (lifted) {
-	            lifted = false;
-	            return handle.classList.contains('handle');
-	        }
-    	}
-	});
-
-	var drakeCompleted = dragula([document.getElementById('completed')], {
-		moves: function (el, container, handle) {
-    		if (lifted) { // Manage the drag after 1 second
-	            lifted = false;
-	            return handle.classList.contains('handle');
-	        }
-    	}
-	});
 
 }
 
@@ -307,7 +300,7 @@ function observeDrop(dropedItem) {
 	var targetList = parentTarget.querySelectorAll('.container');
 
 	if(parentTarget.getAttribute('id') == 'todo') {
-		console.log('if on todo', parentTarget.querySelectorAll('.container'))
+		/*console.log('if on todo', parentTarget.querySelectorAll('.container'))*/
 		data.todo = [];
 
 		for (var i = 0; i < targetList.length; i++) {
@@ -324,9 +317,25 @@ function observeDrop(dropedItem) {
 	dataObjectUpdated();
 }
 
+/*function intro*/
+function intro() {
+	var intro = document.getElementById('intro');
+	var todoApp = document.getElementById('todo-app');
+
+	function showApp() {
+		intro.style.display = 'none'
+		todoApp.style.display = 'block'
+	}
+	setTimeout(function() {
+		showApp();
+	},2000);
+}
+
+intro();
+
 //vibrate function
 document.addEventListener("deviceready", vibrate, false);
 function vibrate() {
-    console.log(navigator.vibrate);
+    /*console.log(navigator.vibrate);*/
     navigator.vibrate(100);
 }
