@@ -240,11 +240,11 @@ function fadeIn(container) {
 function onTouchStart() {
 	console.log('onTouchStart');
 	var target = document.querySelectorAll('.mirror');
-
 	var timer, lockTimer;
 	var touchduration = 800;
 	var dragTarget;
-
+	console.log('global', timer)
+	console.log('global', lockTimer)
 	/*first delete style property*/
 	for (var i = 0; i < target.length; i++) {
 
@@ -263,10 +263,15 @@ function onTouchStart() {
 		}
 	    timer = setTimeout(onlongtouch, touchduration); 
 		lockTimer = true;
+		console.log('touchstart',timer)
+		console.log('touchstart', lockTimer)
 	}
 
 	function touchend() {
+		lifted = false;
 	    //stops short touches from firing the event
+	    console.log('touchend',timer)
+		console.log('touchend',lockTimer)
 	    if (timer){
 	        clearTimeout(timer); // clearTimeout, not cleartimeout..
 			lockTimer = false;
